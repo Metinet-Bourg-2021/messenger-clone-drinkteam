@@ -1,0 +1,30 @@
+[
+  {
+    "code" : "SUCCESS",
+    "description" : "L'action demandée s'est déroulée avec succès !"
+  },
+  {
+    "code" : "NOT_AUTHENTICATED",
+    "description" : "Vous devez être connecté pour effectuer cette action"
+  },
+  {
+    "code" : "NOT_FOUND_USER",
+    "description" : "L'utilisateur demandé n'a pas été trouvé dans la base de données. Cet objet est peut être actuellement inexistant. Veuillez réessayer ultérieurement"
+  },
+  {
+    "code" : "NOT_FOUND_CONVERSATION",
+    "description" : "Cette conversation n'a pas été trouvée. Elle est peut être à ce jour inexistante ou non créée. Veuillez réessayer ultérieurement"
+  },
+  {
+    "code" : "NOT_FOUND_MESSAGE",
+    "description" :  "Ce message n'a pas été trouvé. Il est peut être inexistant ou a été supprimé par l'utilisateur"
+  },
+  {
+    "code" : "NOT_VALID_USERNAMES",
+    "description" : "La liste des noms d'utilisateurs fournis pour la création d'une conversation comporte un élément invalide. Veuillez résoudre ce problème en saisissant à nouveau la liste des noms d'utilisateurs ou en contactant le support technique inexistant."
+  },
+  {
+    "code" : "NOT_VALID_CONTENT",
+    "description" : "Le contenu envoyé est invalide. Veuillez vérifier si le contenu est correct (non vide) et s'il correspond à la demande puis réessayez."
+  }
+]
