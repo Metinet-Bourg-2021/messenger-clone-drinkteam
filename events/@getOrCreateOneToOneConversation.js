@@ -1,27 +1,66 @@
 const { io } = require("../modules/SocketIO")
-const { conversationSchema } = require("../models/ConversationModel")
-const { Conversation } = require("../class/Conversation")
+// const getOrCreateOneToOneConversation = require("./events/@getOrCreateOneToOneConversation")
+const Conversation = require("../class/Conversation")
 const User = require("../class/User");
-const { UserSchema } = require("../models/UserModel");
-const { Conversationschema } = require("../models/ConversationModel");
+const { ConversationSchema } = require("../models/ConversationModel");
+const JWT = require("jsonwebtoken")
 
-io.on("connection", (socket,res) => {
+io.on("connection", (socket) => {
     socket.on("@getOrCreateOneToOneConversation", async ({ token, username }, callback) => {
+
+        console.log("@getOrCreateOneToOneConversation")
+
         if(token){
-            Conversationschema.find({participants: username})
+
+            let me = new User()
+            let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
+            await me.find(decoded.userId)
+
+            ConversationSchema.findOne({ participants: [username, me.username] })
                 .then(async (conversation) => {
-                    console.log(conversation);
+                    if(!conversation){
+                        console.log("> CONVERSATION -> NULL")
 
-                    conversationSchema.findOne({id: id})
-                        .then(async (conversation) => {
-                            if (conversation === null) {
+                        let conversationtoCreate = new Conversation()
+                        conversationtoCreate.type = "one_to_one"
+                        conversationtoCreate.participants = [username, me.username]
+                        conversationtoCreate.title = null
+                        conversationtoCreate.theme = "BLUE"
+                        conversationtoCreate.messages = []
+                        conversationtoCreate.updated_at = new Date()
 
-                                let conversationtoCreate = new Conversation();
-                                conversationtoCreate.participants.push(username);
+                        const result = await ConversationSchema.create(conversationtoCreate.toJSON())
+                        conversationtoCreate.id = result._id.toString()
+
+                        console.log(conversationtoCreate.toJSON())
+
+                        callback({
+                            code:"SUCCESS",
+                            data: {
+                                "conversation" : conversationtoCreate.toJSON()
                             }
-                        })
+
+                        });
+                    } else {
+                        console.log("> CONVERSATION -> EXIST")
+
+                        let conv = new Conversation()
+                        await conv.createConversation(conversation)
+
+                        console.log(conv.toJSON())
+
+                        // socket.send("@getOrCreateOneToOneConversation", callback({code:"SUCCESS", data:{
+                        //         "conversation": conv.toJSON()
+                        //     }}))
+
+                        callback({code:"SUCCESS", data:{
+                            "conversation": conv.toJSON()
+                        }});
+                    }
                 })
+        } else {
+            console.log("NO TOKEN")
+            callback({code:"SUCCESS", data:{}});
         }
-        callback({code:"SUCCESS", data:{}});
     })
 })

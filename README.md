@@ -176,7 +176,7 @@ Le client s'attends à une réponse sous ce format:
 }
 ``` 
 
-#### 3.3.3 __Mika__ Récupération ou création d'une conversation one to one *(4 pts)*
+#### 3.3.3 __Mika__ __Math__ Récupération ou création d'une conversation one to one *(4 pts)*
 
 La requête est du nom suivant: **getOrCreateOneToOneConversation**. 
 
@@ -245,7 +245,7 @@ La réponse attendue:
 }
 ```
 
-#### 3.3.5 Récupération de toutes les conversations *(2 pts*)
+#### __Quent1__ 3.3.5 Récupération de toutes les conversations *(2 pts*)
 
 La requête est du nom suivant: **getConversations**. 
 

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+    const mongoose = require('mongoose');
 
 // jbz vos daronnes
 
@@ -14,7 +14,8 @@ const conversationSchema = mongoose.Schema({
 
     title: {
         type :String,
-        required: true
+        required: false,
+        default: null
     },
 
     theme: {
@@ -35,9 +36,17 @@ const conversationSchema = mongoose.Schema({
     typing: {
         type:JSON,
         required: true
+    },
+
+    messages: {
+        type: Array,
+        required: true,
+        default: []
     }
 }, { minimize: false });
 
 
 
-module.exports = mongoose.model('Conversation', conversationSchema);
+module.exports = {
+    ConversationSchema : mongoose.model('Conversation', conversationSchema)
+};

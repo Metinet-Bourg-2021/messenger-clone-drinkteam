@@ -7,22 +7,22 @@ module.exports = class Conversation {
     id = null
     type = null
     participants = null
-    messages = null
+    messages = []
     title = null
-    theme = false
-    updated_at = false
-    seen = false
-    typing = false
+    theme = null
+    updated_at = null
+    seen = {}
+    typing = {}
 
     constructor(id = null,
                 type = null,
                 participants = null,
-                messages = null,
+                messages = [],
                 title = null,
                 theme = null,
                 updated_at = null,
-                seen = null,
-                typing = null)
+                seen = {},
+                typing = {})
     {
         this.id = id
         this.type = type
@@ -36,26 +36,17 @@ module.exports = class Conversation {
     }
 
 
-    async create(type = null,
-                 participants = null,
-                 messages = null,
-                 title = null,
-                 theme = null,
-                 updated_at = null,
-                 seen = null,
-                 typing = null)
+    async createConversation(conversation = null)
     {
-
-            this.type = type
-            this.participants = participants
-            this.messages = messages
-            this.title = title
-            this.theme = theme
-            this.updated_at = updated_at
-            this.seen = seen
-            this.typing = typing
-
-            await conversationSchema.create(this.toJSON())
+            this.id = conversation._id.toString() || null
+            this.type = conversation.type
+            this.participants = conversation.participants
+            this.messages = conversation.messages || []
+            this.title = conversation.title
+            this.theme = conversation.theme
+            this.updated_at = conversation.updated_at
+            this.seen = conversation.seen
+            this.typing = conversation.typing
 
     }
 
@@ -74,6 +65,7 @@ module.exports = class Conversation {
             }
         } else {
             return {
+                id : this.id || null,
                 type: this.type,
                 participants: this.participants,
                 messages: this.messages,

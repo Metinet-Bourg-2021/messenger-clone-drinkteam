@@ -1,5 +1,7 @@
 const { io } = require("../modules/SocketIO")
 const { UserSchema } = require("../models/UserModel");
+const User = require("../class/User");
+const bcrypt = require("bcrypt");
 
 io.on("connection", (socket) => {
     socket.on("@getUsers", ({ token }, callback) => {
@@ -21,8 +23,18 @@ io.on("connection", (socket) => {
                 ))
             })
             .catch();
-        if (token) {
+        /*
 
-        }
+            UserSchema.findOne({token: token})
+            .then(async (user) => {
+                if (user === null) {
+                    console.log("token non valide");
+                } else {
+
+
+                }
+            })
+            .catch(error => console.log(error));
+        */
     });
 })

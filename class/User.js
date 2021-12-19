@@ -29,6 +29,40 @@ module.exports = class User {
         this.awake = awake
     }
 
+    async find(id = null, username = null) {
+        return new Promise((resolve, reject) => {
+            if (id !== null && id !== undefined) {
+                UserSchema.findOne({ _id : id}).then((response) => {
+                    if (!response) {}
+                    else {
+                        this.id = response._id
+                        this.username = response.username
+                        this.password = response.password
+                        this.token = response.token
+                        this.picture_url = response.picture_url
+                        this.awake = response.awake
+                        resolve(this)
+                    }
+                })
+            } else if (username !== null && username !== undefined) {
+                UserSchema.findOne({ username : username}).then((response) => {
+                    if (!response) {}
+                    else {
+                        this.id = response._id
+                        this.username = response.username
+                        this.password = response.password
+                        this.token = response.token
+                        this.picture_url = response.picture_url
+                        this.awake = response.awake
+                        resolve(this)
+                    }
+                })
+            } else {
+                resolve(this)
+            }
+        })
+    }
+
     async register(username = null,
              password = null,
              token = null,

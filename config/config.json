@@ -3,6 +3,6 @@
     "DATABASE_ADDR" : "localhost",
     "DATABASE_USERNAME" : "messenger",
     "DATABASE_PASSWORD" : "drinkteam",
-    "FULL_ADDR" : "mongodb://messenger:drinkteam@172.31.247.89:27017/MessengerAPI"
+    "FULL_ADDR" : "mongodb://messenger:drinkteam@127.0.0.1:27017/MessengerAPI"
   }
 }
