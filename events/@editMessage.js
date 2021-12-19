@@ -48,6 +48,23 @@ io.on("connection", (socket) => {
                 }
             )
 
+            ConversationSchema.findOne({
+                _id: conversation_id,
+                messages: {
+                    $elemMatch: {
+                        id : Mongoose.Types.ObjectId(message_id)
+                    }
+                }
+            }).then((conversation) => {
+                let message = conversation.messages.find(m => m.id.toString() === message_id)
+                if (message !== undefined) {
+                    io.emit("@messageEdited", {
+                        "conversation_id" : conversation_id,
+                        "message" : message
+                    })
+                }
+            })
+
             console.log(result)
 
             callback({code:"SUCCESS", data:{}});
