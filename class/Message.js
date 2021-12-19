@@ -12,7 +12,7 @@ module.exports = class Message {
     reply_to = null
     edited = false
     deleted = false
-    reactions = {}
+    reactions = []
 
     constructor(id = null,
                 from = null,

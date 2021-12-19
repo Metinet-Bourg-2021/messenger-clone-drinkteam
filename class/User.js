@@ -69,16 +69,19 @@ module.exports = class User {
              picture_url = Pictures.getRandomURL(),
              awake = false)
     {
-        Bcrypt.hash(password, 10, async (error, result) => {
-            this.username = username
-            this.password = result
-            this.token = token
-            this.picture_url = picture_url
-            this.awake = awake
+        return new Promise((resolve, reject) => {
+            Bcrypt.hash(password, 10, async (error, result) => {
+                this.username = username
+                this.password = result
+                this.token = token
+                this.picture_url = picture_url
+                this.awake = awake
 
-            UserSchema.create(this.toJSON()).then(async () => {
-                await this.authenticate(username, password)
-                console.log(this)
+                UserSchema.create(this.toJSON()).then(async () => {
+                    const result = await this.authenticate(username, password)
+                    console.log(this)
+                    resolve(result)
+                })
             })
         })
     }

@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
             messageObject.reply_to = null
             messageObject.edited = false
             messageObject.deleted = false
-            messageObject.reactions = {}
+            messageObject.reactions = []
 
             messageObject.delivered_to[`${me.username}`] = new Date()
 
