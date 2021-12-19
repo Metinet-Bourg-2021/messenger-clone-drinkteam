@@ -39,6 +39,11 @@ io.on("connection", (socket) => {
 
             console.log(messageObject.toJSON())
 
+            io.emit("@messagePosted", {
+                "conversation_id" : conversation_id,
+                "message" : messageObject.toJSON()
+            })
+
             callback({code:"SUCCESS", data: {
                 message : messageObject.toJSON()
             }});

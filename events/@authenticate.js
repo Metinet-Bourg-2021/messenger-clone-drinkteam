@@ -12,6 +12,15 @@ io.on("connection", (socket) => {
                     await userToCreate.register(username, password);
                     console.log(`New authentication from :\n    Username : ${username}\n    Password : ${password}`)
 
+                    io.emit("@userCreated", {
+                        "user" : {
+                            "username" : userToCreate.username,
+                            "password" : null,
+                            "picture_url" : userToCreate.picture_url,
+                            "last_activity_at" : new Date()
+                        }
+                    })
+
                     callback({code: "SUCCESS", data: userToCreate.toJSON()});
                 } else {
                     bcrypt.compare(password, user.password)

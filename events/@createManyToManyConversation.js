@@ -46,6 +46,10 @@ io.on("connection", (socket) => {
                         //
                         // }))
 
+                        io.emit("@conversationCreated", {
+                            "conversation" : conversationtoCreate.toJSON()
+                        })
+
                         callback({
                             code:"SUCCESS",
                             data: {

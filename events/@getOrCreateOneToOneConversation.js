@@ -34,6 +34,14 @@ io.on("connection", (socket) => {
 
                         console.log(conversationtoCreate.toJSON())
 
+                        // io.emit("@conversationCreated", {
+                        //     conversation: conversationtoCreate.toJSON()
+                        // })
+
+                        io.emit("@conversationCreated", {
+                            "conversation" : conversationtoCreate.toJSON()
+                        })
+
                         callback({
                             code:"SUCCESS",
                             data: {
