@@ -32,12 +32,6 @@ io.on("connection", (socket) => {
 
             messageObject.delivered_to[`${me.username}`] = new Date()
 
-            // responseMessage.messages.forEach((message) => {
-            //     console.log(`${message.id.toString()} : ${message_id}`)
-            // })
-
-            // console.log(responseMessage.messages.find(m => m.id === Mongoose.Types.ObjectId(message_id)))
-
             await ConversationSchema.updateOne(
                 { _id : conversation_id },
                 { $push : {

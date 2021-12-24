@@ -7,7 +7,6 @@ io.on("connection", (socket) => {
     socket.on("@getUsers", ({ token }, callback) => {
         UserSchema.find({})
             .then(users => {
-                // console.log(users)
                 socket.send("@getUsers", callback({
                         code:"SUCCESS",
                         data : {
@@ -23,18 +22,5 @@ io.on("connection", (socket) => {
                 ))
             })
             .catch();
-        /*
-
-            UserSchema.findOne({token: token})
-            .then(async (user) => {
-                if (user === null) {
-                    console.log("token non valide");
-                } else {
-
-
-                }
-            })
-            .catch(error => console.log(error));
-        */
     });
 })

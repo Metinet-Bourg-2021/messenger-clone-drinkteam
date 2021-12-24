@@ -14,18 +14,6 @@ io.on("connection", (socket) => {
             let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
             await me.find(decoded.userId)
 
-
-            // console.log(await ConversationSchema.findOne(
-            //     {
-            //         _id: conversation_id,
-            //         messages: {
-            //             $elemMatch: {
-            //                 id : Mongoose.Types.ObjectId(message_id)
-            //             }
-            //         }
-            //     }
-            // ))
-
             let result = await ConversationSchema.updateOne(
                 {
                     _id: conversation_id,

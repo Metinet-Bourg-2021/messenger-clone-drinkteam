@@ -34,10 +34,6 @@ io.on("connection", (socket) => {
 
                         console.log(conversationtoCreate.toJSON())
 
-                        // io.emit("@conversationCreated", {
-                        //     conversation: conversationtoCreate.toJSON()
-                        // })
-
                         io.emit("@conversationCreated", {
                             "conversation" : conversationtoCreate.toJSON()
                         })
@@ -56,10 +52,6 @@ io.on("connection", (socket) => {
                         await conv.createConversation(conversation)
 
                         console.log(conv.toJSON())
-
-                        // socket.send("@getOrCreateOneToOneConversation", callback({code:"SUCCESS", data:{
-                        //         "conversation": conv.toJSON()
-                        //     }}))
 
                         callback({code:"SUCCESS", data:{
                             "conversation": conv.toJSON()

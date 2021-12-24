@@ -20,17 +20,6 @@ io.on("connection", (socket) => {
 
             console.log(`Find :\n> Conversation : ${conversation_id}\n> Message : ${message_id}`)
 
-            // console.log(await ConversationSchema.findOne(
-            //     {
-            //         _id: conversation_id,
-            //         messages: {
-            //             $elemMatch: {
-            //                 id : Mongoose.Types.ObjectId(message_id)
-            //             }
-            //         }
-            //     }
-            // ))
-
             let result = await ConversationSchema.updateOne(
                 {
                     _id: conversation_id,

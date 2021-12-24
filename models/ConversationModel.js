@@ -1,7 +1,5 @@
     const mongoose = require('mongoose');
 
-// jbz vos daronnes
-
 const conversationSchema = mongoose.Schema({
     type:{
         type :String,

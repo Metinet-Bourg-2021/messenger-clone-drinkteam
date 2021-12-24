@@ -24,10 +24,6 @@ io.on("connection", (socket) => {
                 })
 
                 callback({code:"SUCCESS", data:{conversations:convs}})
-
-                // socket.send("@getConversations", )
             })
-        // socket.send("@getConversations", {code:"SUCCESS", data:{conversations:[]}})
-        // callback({code:"SUCCESS", data:{conversations:[]}});
     });
 })

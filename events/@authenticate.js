@@ -27,11 +27,11 @@ io.on("connection", (socket) => {
                         .then(async (valid) => {
                             if (!valid) {
                                 console.log("mdp non valide");
+                                callback({code: "NOT_AUTHENTICATED", data: {}});
                             }
                             console.log(`New authentication from :\n    Username : ${username}\n    Password : ${password}`)
                             let usr = new User()
                             await usr.authenticate(username, password)
-                            console.log(usr.token);
                             callback({code: "SUCCESS", data: usr.toJSON()});
                         }).catch(error => console.log(error));
                 }
