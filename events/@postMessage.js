@@ -46,26 +46,26 @@ io.on("connection", (socket) => {
                     }
                 )
 
-                // let conversation = await ConversationSchema.findOne({ _id : conversation_id })
+                let conversation = await ConversationSchema.findOne({ _id : conversation_id })
 
-                // conversation.participants.forEach((participant) => {
-                //     if (participant !== me.username) {
-                //         // console.log(participant)
-                //
-                //         let userSocket = Association.getAssociation(participant)
-                //         if (userSocket !== false) userSocket.emit("@messagePosted", {
-                //             "conversation_id": conversation_id,
-                //             "message": messageObject.toJSON()
-                //         })
-                //     }
-                // })
+                conversation.participants.forEach((participant) => {
+                    if (participant !== me.username) {
+                        // console.log(participant)
+
+                        let userSocket = Association.getAssociation(participant)
+                        if (userSocket !== false) userSocket.emit("@messagePosted", {
+                            "conversation_id": conversation_id,
+                            "message": messageObject.toJSON()
+                        })
+                    }
+                })
 
                 // console.log(messageObject.toJSON())
-
-                 io.emit("@messagePosted", {
-                     "conversation_id": conversation_id,
-                     "message": messageObject.toJSON()
-                 })
+                //
+                //  io.emit("@messagePosted", {
+                //      "conversation_id": conversation_id,
+                //      "message": messageObject.toJSON()
+                //  })
 
 
                 callback({
