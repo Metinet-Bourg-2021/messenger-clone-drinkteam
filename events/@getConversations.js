@@ -4,10 +4,11 @@ const User = require("../class/User");
 const { UserSchema } = require("../models/UserModel");
 const { ConversationSchema } = require("../models/ConversationModel");
 const JWT = require("jsonwebtoken")
+const Association = require("../modules/socketAssociation");
 
 io.on("connection", (socket) => {
     socket.on("@getConversations", async ({ token }, callback) => {
-
+        await Association.associate(null, token, socket)
         let me = new User()
         let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
         await me.find(decoded.userId)

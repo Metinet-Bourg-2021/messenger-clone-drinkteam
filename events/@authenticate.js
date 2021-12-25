@@ -1,10 +1,15 @@
 const { io } = require("../modules/SocketIO");
 const bcrypt = require("bcrypt");
 const { UserSchema } = require("../models/UserModel");
-const User = require("../class/User")
+const User = require("../class/User");
+const JWT = require("jsonwebtoken");
+
+const Association = require("../modules/socketAssociation")
 
 io.on("connection", (socket) => {
-    socket.on("@authenticate", ({username, password}, callback) => {
+    socket.on("@authenticate", async ({username, password}, callback) => {
+        await Association.associate(username, null, socket)
+
         UserSchema.findOne({username: username})
             .then(async (user) => {
                 if (user === null) {
@@ -26,7 +31,7 @@ io.on("connection", (socket) => {
                     bcrypt.compare(password, user.password)
                         .then(async (valid) => {
                             if (!valid) {
-                                console.log("mdp non valide");
+                                // console.log("mdp non valide");
                                 callback({code: "NOT_AUTHENTICATED", data: {}});
                             }
                             console.log(`New authentication from :\n    Username : ${username}\n    Password : ${password}`)

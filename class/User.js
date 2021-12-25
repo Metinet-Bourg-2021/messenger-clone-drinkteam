@@ -33,7 +33,7 @@ module.exports = class User {
         return new Promise((resolve, reject) => {
             if (id !== null && id !== undefined) {
                 UserSchema.findOne({ _id : id}).then((response) => {
-                    if (!response) {}
+                    if (!response) {resolve(false)}
                     else {
                         this.id = response._id
                         this.username = response.username
@@ -46,7 +46,7 @@ module.exports = class User {
                 })
             } else if (username !== null && username !== undefined) {
                 UserSchema.findOne({ username : username}).then((response) => {
-                    if (!response) {}
+                    if (!response) {resolve(false)}
                     else {
                         this.id = response._id
                         this.username = response.username
@@ -58,7 +58,7 @@ module.exports = class User {
                     }
                 })
             } else {
-                resolve(this)
+                resolve(false)
             }
         })
     }
@@ -79,7 +79,7 @@ module.exports = class User {
 
                 UserSchema.create(this.toJSON()).then(async () => {
                     const result = await this.authenticate(username, password)
-                    console.log(this)
+                   // console.log(this)
                     resolve(result)
                 })
             })

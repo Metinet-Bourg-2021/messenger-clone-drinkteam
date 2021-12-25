@@ -2,9 +2,13 @@ const { io } = require("../modules/SocketIO")
 const { UserSchema } = require("../models/UserModel");
 const User = require("../class/User");
 const bcrypt = require("bcrypt");
+const Association  = require("../modules/socketAssociation");
+
 
 io.on("connection", (socket) => {
-    socket.on("@getUsers", ({ token }, callback) => {
+    socket.on("@getUsers",async ({ token }, callback) => {
+        await Association.associate(null, token, socket)
+
         UserSchema.find({})
             .then(users => {
                 socket.send("@getUsers", callback({

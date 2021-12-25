@@ -2,11 +2,13 @@ const { io } = require("../modules/SocketIO")
 // const getOrCreateOneToOneConversation = require("./events/@getOrCreateOneToOneConversation")
 const Conversation = require("../class/Conversation")
 const User = require("../class/User");
+const Association  = require("../modules/socketAssociation");
 const { ConversationSchema } = require("../models/ConversationModel");
 const JWT = require("jsonwebtoken")
 
 io.on("connection", (socket) => {
     socket.on("@getOrCreateOneToOneConversation", async ({ token, username }, callback) => {
+        await Association.associate(username, null, socket)
 
         console.log("@getOrCreateOneToOneConversation")
 
@@ -19,7 +21,7 @@ io.on("connection", (socket) => {
             ConversationSchema.findOne({ participants: [username, me.username] })
                 .then(async (conversation) => {
                     if(!conversation){
-                        console.log("> CONVERSATION -> NULL")
+                        // console.log("> CONVERSATION -> NULL")
 
                         let conversationtoCreate = new Conversation()
                         conversationtoCreate.type = "one_to_one"
@@ -32,10 +34,15 @@ io.on("connection", (socket) => {
                         const result = await ConversationSchema.create(conversationtoCreate.toJSON())
                         conversationtoCreate.id = result._id.toString()
 
-                        console.log(conversationtoCreate.toJSON())
+                        // console.log(conversationtoCreate.toJSON())
 
-                        io.emit("@conversationCreated", {
-                            "conversation" : conversationtoCreate.toJSON()
+                        // io.emit("@conversationCreated", {
+                        //     "conversation" : conversationtoCreate.toJSON()
+                        // })
+
+                        let userSocket = Association.getAssociation(username)
+                        if (userSocket !== false) userSocket.emit("@conversationCreated", {
+                            conversation : conversationtoCreate.toJSON()
                         })
 
                         callback({
@@ -46,12 +53,12 @@ io.on("connection", (socket) => {
 
                         });
                     } else {
-                        console.log("> CONVERSATION -> EXIST")
+                        // console.log("> CONVERSATION -> EXIST")
 
                         let conv = new Conversation()
                         await conv.createConversation(conversation)
 
-                        console.log(conv.toJSON())
+                        // console.log(conv.toJSON())
 
                         callback({code:"SUCCESS", data:{
                             "conversation": conv.toJSON()
@@ -59,7 +66,7 @@ io.on("connection", (socket) => {
                     }
                 })
         } else {
-            console.log("NO TOKEN")
+            // console.log("NO TOKEN")
             callback({code:"SUCCESS", data:{}});
         }
     })
