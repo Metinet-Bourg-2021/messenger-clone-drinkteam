@@ -21,15 +21,22 @@ io.on("connection", (socket) => {
                 message_id,
                 time: new Date()
             };
+            
+            if(!seen){
+                callback({code: "NOT_FOUND_MESSAGE", data: {}})
+            } else {
 
-            io.emit("@conversationSeen", {
-                conversation
-            })
+                io.emit("@conversationSeen", {
+                    conversation
+                })
 
-            await ConversationSchema.updateOne({_id: conversation_id}, {$set: { seen }})
-            callback({code: "SUCCESS", data: {
-                conversation
-            } });
+                await ConversationSchema.updateOne({_id: conversation_id}, {$set: {seen}})
+                callback({
+                    code: "SUCCESS", data: {
+                        conversation
+                    }
+                });
+            }
         }
 
     });

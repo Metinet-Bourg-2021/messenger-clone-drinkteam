@@ -13,40 +13,49 @@ io.on("connection", (socket) => {
         console.log("@postMessage")
 
         if (token) {
-            let me = new User()
-            let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
-            await me.find(decoded.userId)
 
-            let messageObject = new Message()
-            messageObject.id = Mongoose.Types.ObjectId()
-            messageObject.from = me.username
-            messageObject.content = content
-            messageObject.posted_at = new Date()
-            messageObject.delivered_to = []
-            messageObject.reply_to = null
-            messageObject.edited = false
-            messageObject.deleted = false
-            messageObject.reactions = []
+            if(content != ""){
+                callback({ code: "NOT_VALID_CONTENT", data: {}});
+            }else {
+                let me = new User()
+                let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
+                await me.find(decoded.userId)
 
-            messageObject.delivered_to[`${me.username}`] = new Date()
+                let messageObject = new Message()
+                messageObject.id = Mongoose.Types.ObjectId()
+                messageObject.from = me.username
+                messageObject.content = content
+                messageObject.posted_at = new Date()
+                messageObject.delivered_to = []
+                messageObject.reply_to = null
+                messageObject.edited = false
+                messageObject.deleted = false
+                messageObject.reactions = []
 
-            await ConversationSchema.updateOne(
-                { _id : conversation_id },
-                { $push : {
-                    messages: messageObject.toJSON()
-                    }}
-            )
+                messageObject.delivered_to[`${me.username}`] = new Date()
 
-            console.log(messageObject.toJSON())
+                await ConversationSchema.updateOne(
+                    {_id: conversation_id},
+                    {
+                        $push: {
+                            messages: messageObject.toJSON()
+                        }
+                    }
+                )
 
-            io.emit("@messagePosted", {
-                "conversation_id" : conversation_id,
-                "message" : messageObject.toJSON()
-            })
+                console.log(messageObject.toJSON())
 
-            callback({code:"SUCCESS", data: {
-                message : messageObject.toJSON()
-            }});
+                io.emit("@messagePosted", {
+                    "conversation_id": conversation_id,
+                    "message": messageObject.toJSON()
+                })
+
+                callback({
+                    code: "SUCCESS", data: {
+                        message: messageObject.toJSON()
+                    }
+                });
+            }
         }
     });
 })

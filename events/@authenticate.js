@@ -31,8 +31,12 @@ io.on("connection", (socket) => {
                             }
                             console.log(`New authentication from :\n    Username : ${username}\n    Password : ${password}`)
                             let usr = new User()
-                            await usr.authenticate(username, password)
-                            callback({code: "SUCCESS", data: usr.toJSON()});
+                            if(await usr.authenticate(username, password)){
+                                callback({code: "SUCCESS", data: usr.toJSON()});
+                            } else {
+                                callback({code: "NOT_FOUND_USER ", data: {}});
+                            }
+                            
                         }).catch(error => console.log(error));
                 }
             })

@@ -12,54 +12,60 @@ io.on("connection", (socket) => {
 
         if(token){
 
-            let me = new User()
-            let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
-            await me.find(decoded.userId)
+            if(!usernames){
+                callback({code: "NOT_VALID_USERNAMES ", data: {}});
+            } else {
+                let me = new User()
+                let decoded = JWT.decode(token, 'RANDOM_TOKEN_SECRET')
+                await me.find(decoded.userId)
 
-            usernames.push(me.username)
+                usernames.push(me.username)
 
-            ConversationSchema.findOne({ participants: usernames })
-                .then(async (conversation) => {
-                    if(!conversation){
-                        console.log("> CONVERSATION -> NULL")
+                ConversationSchema.findOne({participants: usernames})
+                    .then(async (conversation) => {
+                        if (!conversation) {
+                            console.log("> CONVERSATION -> NULL")
 
-                        let conversationtoCreate = new Conversation()
-                        conversationtoCreate.type = "many_to_many"
-                        conversationtoCreate.participants = usernames
-                        conversationtoCreate.title = null
-                        conversationtoCreate.theme = "BLUE"
-                        conversationtoCreate.messages = []
-                        conversationtoCreate.updated_at = new Date()
+                            let conversationtoCreate = new Conversation()
+                            conversationtoCreate.type = "many_to_many"
+                            conversationtoCreate.participants = usernames
+                            conversationtoCreate.title = null
+                            conversationtoCreate.theme = "BLUE"
+                            conversationtoCreate.messages = []
+                            conversationtoCreate.updated_at = new Date()
 
-                        const result = await ConversationSchema.create(conversationtoCreate.toJSON())
-                        conversationtoCreate.id = result._id.toString()
+                            const result = await ConversationSchema.create(conversationtoCreate.toJSON())
+                            conversationtoCreate.id = result._id.toString()
 
-                        console.log(conversationtoCreate.toJSON())
+                            console.log(conversationtoCreate.toJSON())
 
-                        io.emit("@conversationCreated", {
-                            "conversation" : conversationtoCreate.toJSON()
-                        })
+                            io.emit("@conversationCreated", {
+                                "conversation": conversationtoCreate.toJSON()
+                            })
 
-                        callback({
-                            code:"SUCCESS",
-                            data: {
-                                "conversation" : conversationtoCreate.toJSON()
-                            }
+                            callback({
+                                code: "SUCCESS",
+                                data: {
+                                    "conversation": conversationtoCreate.toJSON()
+                                }
 
-                        });
-                    } else {
-                        console.log("> CONVERSATION -> EXIST")
+                            });
+                        } else {
+                            console.log("> CONVERSATION -> EXIST")
 
-                        let conv = new Conversation()
-                        await conv.createConversation(conversation)
+                            let conv = new Conversation()
+                            await conv.createConversation(conversation)
 
-                        console.log(conv.toJSON())
+                            console.log(conv.toJSON())
 
-                        callback({code:"SUCCESS", data:{
-                                "conversation": conv.toJSON()
-                            }});
-                    }
-                })
+                            callback({
+                                code: "SUCCESS", data: {
+                                    "conversation": conv.toJSON()
+                                }
+                            });
+                        }
+                    })
+            }
         } else {
             console.log("NO TOKEN")
             callback({code:"SUCCESS", data:{}});
