@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
                     }
                 )
 
-                let conversation = await ConversationSchema.findOne({ _id : conversation_id })
+                // let conversation = await ConversationSchema.findOne({ _id : conversation_id })
 
                 // conversation.participants.forEach((participant) => {
                 //     if (participant !== me.username) {
@@ -66,8 +66,6 @@ io.on("connection", (socket) => {
                      "conversation_id": conversation_id,
                      "message": messageObject.toJSON()
                  })
-
-
 
 
                 callback({

@@ -18,8 +18,7 @@ io.on("connection", (socket) => {
         if(!conversation){
             callback({code: "NOT_FOUND_CONVERSATION", data: {}})
         } else {
-
-            let seen = conversation;
+            let seen = conversation.seen;
             seen[me.username] = {
                 message_id,
                 time: new Date()
