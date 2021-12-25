@@ -50,7 +50,6 @@ io.on("connection", (socket) => {
 
                 conversation.participants.forEach((participant) => {
                     if (participant !== me.username) {
-                        // console.log(participant)
 
                         let userSocket = Association.getAssociation(participant)
                         if (userSocket !== false) userSocket.emit("@messagePosted", {
