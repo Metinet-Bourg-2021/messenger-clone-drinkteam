@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
                             let conv = new Conversation()
                             await conv.createConversation(conversation)
 
-                            console.log(conv.toJSON())
+                            //console.log(conv.toJSON())
 
                             callback({
                                 code: "SUCCESS", data: {

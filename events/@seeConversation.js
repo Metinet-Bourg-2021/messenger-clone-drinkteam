@@ -19,12 +19,12 @@ io.on("connection", (socket) => {
             callback({code: "NOT_FOUND_CONVERSATION", data: {}})
         } else {
 
-            let seen = conversation.seen;
+            let seen = conversation;
             seen[me.username] = {
                 message_id,
                 time: new Date()
             };
-            
+
             if(!seen){
                 callback({code: "NOT_FOUND_MESSAGE", data: {}})
             } else {
@@ -33,15 +33,15 @@ io.on("connection", (socket) => {
                 //     conversation
                 // })
 
-                conversation.participants.forEach((participant) => {
-                    if (participant !== me.username) {
-
-                        let userSocket = Association.getAssociation(participant)
-                        if (userSocket !== false) userSocket.emit("@conversationSeen", {
-                            conversation : conversation
-                        })
-                    }
-                })
+                // conversation.participants.forEach((participant) => {
+                //     if (participant !== me.username) {
+                //
+                //         let userSocket = Association.getAssociation(participant)
+                //         if (userSocket !== false) userSocket.emit("@conversationSeen", {
+                //             conversation: conversation
+                //         })
+                //     }
+                // })
 
                 await ConversationSchema.updateOne({_id: conversation_id}, {$set: {seen}})
                 callback({
