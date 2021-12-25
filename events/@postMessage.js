@@ -13,7 +13,6 @@ io.on("connection", (socket) => {
     socket.on("@postMessage", async ({ token, conversation_id, content }, callback) => {
         await Association.associate(null, token, socket)
 
-
         if (token) {
 
             if(content === ""){
