@@ -32,15 +32,15 @@ io.on("connection", (socket) => {
                 //     conversation
                 // })
 
-                conversation.participants.forEach((participant) => {
-                    if (participant !== me.username) {
-
-                        let userSocket = Association.getAssociation(participant)
-                        if (userSocket !== false) userSocket.emit("@conversationSeen", {
-                            conversation: conversation
-                        })
-                    }
-                })
+                // conversation.participants.forEach((participant) => {
+                //     if (participant !== me.username) {
+                //
+                //         let userSocket = Association.getAssociation(participant)
+                //         if (userSocket !== false) userSocket.emit("@conversationSeen", {
+                //             conversation: conversation
+                //         })
+                //     }
+                // })
 
                 await ConversationSchema.updateOne({_id: conversation_id}, {$set: {seen}})
                 callback({
